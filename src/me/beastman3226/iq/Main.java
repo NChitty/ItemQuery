@@ -11,11 +11,11 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
+        BuyableMaterials.initAll(this);
     }
 
     @Override
     public void onDisable() {
-        
+
     }
 }

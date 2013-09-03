@@ -9,21 +9,24 @@ import org.bukkit.plugin.Plugin;
  *
  * @author beastman3226
  */
-public enum BuyableMaterials {
-    ACTIVATOR_RAIL (Material.ACTIVATOR_RAIL, 110.0, true),
-    AIR (Material.AIR, 0.0, false),
-    EARTH (Material.ANVIL, 6.37814e6, true),
-    MARS (Material.APPLE, 3.3972e6, true),
-    JUPITER (Material.ARROW,   7.1492e7, true),
-    SATURN (Material.BAKED_POTATO, 6.0268e7, true),
-    URANUS (Material.BEACON, 2.5559e7, true),
-    NEPTUN (Material.BED, 2.4746e7, true);
+public class BuyableMaterials {
+
+    static void initAll(Main aThis) {
+        plugin = aThis;
+        int i = 0;
+        for(Material m : Material.values()) {
+            BuyableMaterials n = new BuyableMaterials(m, plugin.getConfig().getDouble(m.name()), true, i);
+            materialList[i] = n;
+            i++;
+        }
+    }
 
     private final Material mat;   // in kilograms
     private double unitPrice; // in meters
     private final boolean buyable;
-    private static final Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("ItemQuery");
-    BuyableMaterials(Material m, double price, boolean buyable) {
+    private static Main plugin;
+    private static BuyableMaterials[] materialList = new BuyableMaterials[Material.values().length];
+    public BuyableMaterials(Material m, double price, boolean buyable, int index) {
         this.mat = m;
         this.unitPrice = price;
         this.buyable = buyable;
@@ -35,6 +38,21 @@ public enum BuyableMaterials {
 
     public void setUnitPrice(double newPrice) {
         this.unitPrice = newPrice;
+    }
+
+    public static BuyableMaterials getMaterial(Material m) {
+        BuyableMaterials s = null;
+        for(BuyableMaterials bm : materialList) {
+            if(bm.mat.equals(m)) {
+                s = bm;
+                return bm;
+            }
+        }
+        return s;
+    }
+
+    public static BuyableMaterials getMaterial(int index) {
+        return materialList[index];
     }
 
 }

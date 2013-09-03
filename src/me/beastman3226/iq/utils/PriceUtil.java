@@ -1,6 +1,7 @@
 package me.beastman3226.iq.utils;
 
 import me.beastman3226.iq.BuyableMaterials;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -8,7 +9,7 @@ import me.beastman3226.iq.BuyableMaterials;
  */
 public class PriceUtil {
 
-    public double calculate(BuyableMaterials mat, int amount) {
+    public static double calculate(ItemStack[] is) {
         return 0;
     }
 

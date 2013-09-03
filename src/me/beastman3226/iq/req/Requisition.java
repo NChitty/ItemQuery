@@ -1,7 +1,7 @@
 package me.beastman3226.iq.req;
 
-import net.minecraft.server.v1_6_R2.ItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -13,7 +13,7 @@ public class Requisition {
     private final Player reqPlayer;
     private final double price;
 
-    private Requisition(ItemStack[] items, Player req, double price) {
+    protected Requisition(ItemStack[] items, Player req, double price) {
         this.items = items;
         this.reqPlayer = req;
         this.price = price;
