@@ -1,26 +1,20 @@
 package me.beastman3226.iq.data;
 
-import me.beastman3226.iq.database.SQLite;
-import org.bukkit.plugin.Plugin;
+import me.beastman3226.iq.Main;
+import me.beastman3226.iq.database.DatabaseType;
 
 /**
  *
  * @author beastman3226
  */
-public class DataSQLite implements Data {
+public class DataSQLite extends Data {
 
-    private static SQLite dbS;
-    protected SQLite db;
-
-    public static DataSQLite initialize(Plugin p, String dbLocation) {
-        dbS = new SQLite(p, dbLocation);
-        return new DataSQLite();
+    public DataSQLite(Main main) {
+        super(main);
     }
 
     @Override
-    public SQLite getDatabase() {
-        db = dbS;
-        return db;
+    public DatabaseType getType() {
+        return DatabaseType.SQLite;
     }
-
 }

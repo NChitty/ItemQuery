@@ -1,5 +1,6 @@
 package me.beastman3226.iq.data.handler;
 
+import java.sql.Connection;
 import me.beastman3226.iq.Main;
 
 /**
@@ -8,8 +9,5 @@ import me.beastman3226.iq.Main;
  */
 public class DataHandler {
 
-    public static final Main p = new Main();
-
-
-
+    protected
 }

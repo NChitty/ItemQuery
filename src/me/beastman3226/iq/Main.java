@@ -2,8 +2,10 @@ package me.beastman3226.iq;
 
 import java.util.HashMap;
 import me.beastman3226.iq.data.Data;
-import me.beastman3226.iq.data.DataMySQL;
 import me.beastman3226.iq.data.DataSQLite;
+import me.beastman3226.iq.database.Database;
+import me.beastman3226.iq.database.MySQL;
+import me.beastman3226.iq.database.SQLite;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,7 +15,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Main extends JavaPlugin {
 
-    public Data data;
+    public Database data;
+    public static Data d;
 
     @Override
     public void onEnable() {
@@ -37,10 +40,12 @@ public class Main extends JavaPlugin {
         if(this.getConfig().getBoolean("db.enabled")) {
             switch(this.getConfig().getString("db.type").toLowerCase()) {
                 case "sqlite" :
-                    data = (DataSQLite) DataSQLite.initialize(this, this.getConfig().getString("db.name"));
+                    data = (SQLite) new SQLite(this, this.getConfig().getString("db.name"));
+                    d = (DataSQLite) new DataSQLite(this);
                     break;
                 case "mysql" :
-                    data = (DataMySQL) DataMySQL.initialize(this, new String[]{this.getConfig().getString("db.ip"), this.getConfig().getString("db.port"), this.getConfig().getString("db.name"), this.getConfig().getString("db.user"), this.getConfig().getString("db.pass")});
+                    data = (MySQL) new MySQL.DbBuilder(this.getConfig().getString("db.ip"), this.getConfig().getString("db.port"), this).dbName(this.getConfig().getString("db.name")).user(this.getConfig().getString("db.user")).pass(this.getConfig().getString("db.pass")).build();
+
                     break;
                 default :
                     getLogger().info("That database isn't supported, please try SQLite or MySQL.");
