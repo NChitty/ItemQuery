@@ -22,7 +22,6 @@ public class RequisitionManager {
             Logger.getLogger(RequisitionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         double price = PriceUtil.calculate(is);
-        req = new Requisition(is, p, price);
         return req;
     }
 }

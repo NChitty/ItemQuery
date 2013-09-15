@@ -1,7 +1,8 @@
 package me.beastman3226.iq.utils;
 
-import me.beastman3226.iq.BuyableMaterials;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 /**
  *
@@ -9,7 +10,14 @@ import org.bukkit.inventory.ItemStack;
  */
 public class PriceUtil {
 
+    private static Plugin p = Bukkit.getServer().getPluginManager().getPlugin("ItemQuery");
+
     public static double calculate(ItemStack[] is) {
+        double price = 0.0;
+        for(ItemStack item : is) {
+            String path = item.getType().name().toLowerCase();
+            price = price + p.getConfig().getDouble(path);
+        }
         return 0;
     }
 

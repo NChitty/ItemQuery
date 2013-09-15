@@ -6,16 +6,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
+import org.bukkit.plugin.Plugin;
 
 /**
  *
  * @author beastman3226
  */
-public class MySQL extends Database {
+public abstract class MySQL extends Database {
 
     private Connection connection;
 
-    public MySQL(DbBuilder builder) {
+    public MySQL(MySQL.DbBuilder builder) {
         super(builder);
     }
 
@@ -84,6 +85,49 @@ public class MySQL extends Database {
             e1.printStackTrace();
         }
 
+    }
+
+    public static class DbBuilder extends Database.DbBuilder {
+
+        private String host = "localhost";
+        private String port = "3306";
+        private String dbName = "ItemQuery";
+        private String user = "user";
+        private String pass = "password";
+        private Plugin plugin;
+
+        public DbBuilder(String host, String port, Plugin plugin) {
+            super(host, port, plugin);
+        }
+
+        @Override
+        public Database.DbBuilder dbName(String dbName) {
+            if (!dbName.equalsIgnoreCase("ItemQuery")) {
+                this.dbName = dbName;
+            }
+            return this;
+        }
+
+        @Override
+        public Database.DbBuilder user(String user) {
+            if (!user.equalsIgnoreCase("user")) {
+                this.user = user;
+            }
+            return this;
+        }
+
+        @Override
+        public Database.DbBuilder pass(String pass) {
+            if (!pass.equalsIgnoreCase("password")) {
+                this.pass = pass;
+            }
+            return this;
+        }
+
+        @Override
+        public Database build() {
+            return new Database(this);
+        }
     }
 
 }

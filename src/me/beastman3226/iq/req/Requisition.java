@@ -1,6 +1,5 @@
 package me.beastman3226.iq.req;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -9,13 +8,13 @@ import org.bukkit.inventory.ItemStack;
  */
 public class Requisition {
 
-    private ItemStack[] items;
-    private final Player reqPlayer;
-    private final double price;
+    public ItemStack[] items;
+    public String playerName;
+    public double price;
 
-    protected Requisition(ItemStack[] items, Player req, double price) {
-        this.items = items;
-        this.reqPlayer = req;
+    public Requisition(ItemStack[] is, String name, double price) {
+        this.items = is;
+        this.playerName = name;
         this.price = price;
     }
 

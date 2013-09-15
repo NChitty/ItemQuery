@@ -7,7 +7,7 @@ import org.bukkit.plugin.Plugin;
  *
  * @author beastman3226
  */
-public abstract class WeirdDatabase {
+public abstract class WeirdDatabase extends Database{
 
     /**
      * Plugin instance, use for plugin.getDataFolder() and plugin.getLogger()
@@ -21,7 +21,7 @@ public abstract class WeirdDatabase {
      *            Plugin instance
      */
     protected WeirdDatabase(Plugin plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     /**

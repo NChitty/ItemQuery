@@ -79,6 +79,9 @@ public class Database {
         this.plugin = builder.plugin;
     }
 
+    public Database(Plugin p) {
+        this.plugin = p;
+    }
     /**
      * Returns a string[] holding all of the databases values <p> Indexes
      * according to values: 0 = host 1 = port 2 = dbName 3 = user 4 = pass </p>
