@@ -46,6 +46,9 @@ public class Main extends JavaPlugin {
                     getLogger().info("That database isn't supported, please try SQLite or MySQL.");
                     break;
             }
+        } else {
+            getLogger().info("Shutting down ItemQuery, databases are essential.");
+            this.getPluginLoader().disablePlugin(this);
         }
     }
 
