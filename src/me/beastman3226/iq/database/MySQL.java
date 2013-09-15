@@ -11,11 +11,11 @@ import java.util.logging.Level;
  *
  * @author beastman3226
  */
-public class MySQLDatabase extends Database {
+public class MySQL extends Database {
 
     private Connection connection;
 
-    public MySQLDatabase(DbBuilder builder) {
+    public MySQL(DbBuilder builder) {
         super(builder);
     }
 
