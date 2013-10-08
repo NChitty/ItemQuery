@@ -2,11 +2,6 @@ package me.beastman3226.iq;
 
 import java.util.HashMap;
 import java.util.logging.Level;
-import me.beastman3226.iq.data.Data;
-import me.beastman3226.iq.data.DataSQLite;
-import me.beastman3226.iq.database.Database;
-import me.beastman3226.iq.database.MySQL;
-import me.beastman3226.iq.database.SQLite;
 import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
