@@ -30,6 +30,7 @@ public class Main extends JavaPlugin {
                 getLogger().log(Level.INFO, "Please set the cost for {0}", mat.name());
             }
         }
+        this.getConfig().options().header("MySQL is our preferred database type. SQLite is the only other supported type.");
     }
 
     @Override
