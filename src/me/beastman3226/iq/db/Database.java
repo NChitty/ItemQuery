@@ -18,7 +18,6 @@ public abstract class Database {
      */
     protected Plugin plugin;
     protected Statement statement;
-    protected DatabaseType type;
 
     /**
      * Creates a new Database
@@ -26,9 +25,8 @@ public abstract class Database {
      * @param plugin
      *            Plugin instance
      */
-    protected Database(Plugin plugin, DatabaseType type) {
+    protected Database(Plugin plugin) {
         this.plugin = plugin;
-        this.type = type;
     }
 
     /**
@@ -57,16 +55,4 @@ public abstract class Database {
      */
     public abstract void closeConnection();
 
-    public abstract DatabaseType getType();
-
-    public void setType(String name) throws UnsupportedDatabaseException {
-        for(DatabaseType leType : DatabaseType.values()) {
-            if(leType.getType().equals(name)) {
-                this.type = leType;
-            }
-        }
-        if (this.type == null) {
-            throw new UnsupportedDatabaseException(name);
-        }
-    }
 }

@@ -45,22 +45,17 @@ public class MySQL extends Database {
      *            Password
      */
     public MySQL(Plugin plugin, String hostname, String port, String database, String username, String password) {
-        super(plugin, DatabaseType.MySQL);
+        super(plugin);
         this.hostname = hostname;
         this.port = port;
         this.database = database;
         this.user = username;
         this.password = password;
-        this.connection = null;
-        try {
-            super.setType("MySQL");
-        } catch (UnsupportedDatabaseException ex) {
-            Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.connection = openConnection();
     }
 
     @Override
-    public Connection openConnection() {
+    public final Connection openConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database, this.user, this.password);
@@ -127,10 +122,4 @@ public class MySQL extends Database {
         }
 
     }
-
-    @Override
-    public DatabaseType getType() {
-        return super.type;
-    }
-
 }
