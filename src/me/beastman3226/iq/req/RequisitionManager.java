@@ -3,12 +3,14 @@ package me.beastman3226.iq.req;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.beastman3226.iq.Main;
 import me.beastman3226.iq.errors.ItemFormatException;
+import me.beastman3226.iq.errors.NonExistantRequisitionException;
 import me.beastman3226.iq.utils.ItemConverter;
 import me.beastman3226.iq.utils.PriceUtil;
 import me.beastman3226.iq.utils.SQLScanner;
@@ -48,5 +50,27 @@ public class RequisitionManager {
                 Logger.getLogger(RequisitionManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+
+    public static Requisition getReq(String player) throws NonExistantRequisitionException, ItemFormatException {
+        Requisition req = null;
+        try {
+        ResultSet rs = Main.db.getStatment().executeQuery("SELECT * FROM 'requisitions' WHERE PlayerName=" + player);
+            while(rs.next()) {
+                if(rs.getString("PlayerName").equalsIgnoreCase(player)) {
+                    req = new Requisition(ItemConverter.convert(rs.getString("ReqItems").split(",")), player, PriceUtil.calculate(ItemConverter.convert(rs.getString("ReqItems").split(","))));
+                }
+            }
+        } catch (SQLException e) {
+        }
+        if(req == null) {
+            throw new NonExistantRequisitionException();
+        }
+        return req;
+    }
+
+    public static boolean order(String player) {
+
+        return ;
     }
 }
