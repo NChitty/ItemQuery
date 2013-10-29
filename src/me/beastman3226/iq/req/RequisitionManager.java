@@ -47,7 +47,7 @@ public class RequisitionManager {
             try {
                 Statement s = c.createStatement();
                 try {
-                    s.execute(SQLScanner.storeReq(new File("/StoreReq.sql"), req.playerName, req.price, ItemConverter.convert(req.items)));
+                    s.execute(SQLScanner.storeReq(new File("/StoreReq.sql"), req.player, req.price, ItemConverter.convert(req.items)));
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(RequisitionManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
