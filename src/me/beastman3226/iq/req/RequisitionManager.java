@@ -13,8 +13,13 @@ import me.beastman3226.iq.errors.ItemFormatException;
 import me.beastman3226.iq.errors.NonExistantRequisitionException;
 import me.beastman3226.iq.utils.ItemConverter;
 import me.beastman3226.iq.utils.PriceUtil;
+import me.beastman3226.iq.utils.RequisitionMath;
 import me.beastman3226.iq.utils.SQLScanner;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -70,7 +75,18 @@ public class RequisitionManager {
     }
 
     public static boolean order(String player) {
-
-        return ;
+        Requisition req = null;
+        try {
+            req = getReq(player);
+        } catch (NonExistantRequisitionException | ItemFormatException ex) {
+            Logger.getLogger(RequisitionManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            if(Main.econ.has(player, req.price)) {
+                Inventory i = Bukkit.createInventory(Bukkit.getPlayerExact(player), RequisitionMath.slots(req.items.length));
+                i.setContents(req.items);
+                req = null;
+                return true;
+            }
+        return false;
     }
 }

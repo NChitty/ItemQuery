@@ -7,7 +7,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.beastman3226.iq.db.MySQL;
 import me.beastman3226.iq.utils.SQLScanner;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -17,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin {
 
     public static MySQL db;
+    public static Economy econ;
 
     @Override
     public void onEnable() {
@@ -56,5 +59,18 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
     }
 }

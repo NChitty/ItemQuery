@@ -1,0 +1,4 @@
+main: me.beastman3226.iq.Main
+version: 1.0
+depend: [Vault]
+author: beastman3226
