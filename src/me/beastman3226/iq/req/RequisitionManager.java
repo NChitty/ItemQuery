@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import me.beastman3226.iq.Main;
 import me.beastman3226.iq.errors.ItemFormatException;
 import me.beastman3226.iq.errors.NonExistantRequisitionException;
+import me.beastman3226.iq.events.RequisitionMadeEvent;
 import me.beastman3226.iq.utils.ItemConverter;
 import me.beastman3226.iq.utils.PriceUtil;
 import me.beastman3226.iq.utils.RequisitionMath;
@@ -41,6 +42,7 @@ public class RequisitionManager {
         double price = PriceUtil.calculate(is);
         req = new Requisition(is, p.getName(), price);
         store(req);
+        Bukkit.getServer().getPluginManager().callEvent(new RequisitionMadeEvent(req));
         return req;
     }
 
@@ -84,21 +86,12 @@ public class RequisitionManager {
         } catch (NonExistantRequisitionException | ItemFormatException ex) {
             Logger.getLogger(RequisitionManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-            if(Main.econ.has(player, req.price)) {
+        if(Main.econ.has(player, req.price)) {
                 Player p = Bukkit.getPlayerExact(player);
-                if(RequisitionMath.slots(req.items.length) < 54) {
-                    Inventory i = Bukkit.createInventory(Bukkit.getPlayerExact(player), RequisitionMath.slots(req.items.length), "You only get these items once");
-                    i.setContents(req.items);
-                    req = null;
-                    return true;
-                } else {
-
-                    Location loc = p.getLocation();
-                    loc.getBlock().setType(Material.CHEST);
-                    DoubleChest c = (DoubleChest) loc.getBlock();
-                    c.getInventory().setContents(req.items);
-                }
-            }
+                ItemInventory i = new ItemInventory(player, req.items);
+                i.showInventory();
+                return true;
+        }
         return false;
     }
 }

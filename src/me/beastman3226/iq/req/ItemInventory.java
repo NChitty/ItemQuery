@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.beastman3226.iq.errors.ItemFormatException;
+import me.beastman3226.iq.errors.NoItemsToGiveException;
 import me.beastman3226.iq.errors.NonExistantRequisitionException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class ItemInventory {
     private Inventory showed;
     private static final int size = 54;
     private String player;
-    protected static ArrayList<ItemInventory> inventories = new ArrayList<>();
+    public static ArrayList<ItemInventory> inventories = new ArrayList<>();
 
     public ItemInventory(String player, ItemStack[] items) {
         this.player = player;
@@ -59,7 +60,16 @@ public class ItemInventory {
         this.items.addAll(Arrays.asList(items));
     }
 
-    public ItemStack[] getItems() {
+    public ItemStack[] getItems() throws NoItemsToGiveException {
+        if(this.items.isEmpty()) {
+            this.getRequisition().items = null;
+            this.getRequisition().player = null;
+            showed = null;
+            player = null;
+            items = null;
+            inventories.remove(this);
+            throw new NoItemsToGiveException();
+        }
         return this.items.toArray(new ItemStack[]{});
     }
 
