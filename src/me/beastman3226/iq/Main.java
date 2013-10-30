@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import me.beastman3226.iq.commands.CommandHandler;
 import me.beastman3226.iq.db.MySQL;
 import me.beastman3226.iq.utils.SQLScanner;
 import net.milkbowl.vault.economy.Economy;
@@ -20,6 +21,7 @@ public class Main extends JavaPlugin {
 
     public static MySQL db;
     public static Economy econ;
+    private final CommandHandler ch = new CommandHandler();
 
     @Override
     public void onEnable() {
@@ -27,7 +29,7 @@ public class Main extends JavaPlugin {
             getConfig().set("db.enabled", true);
             getConfig().set("db.ip", "localhost");
             getConfig().set("db.port", "3306");
-            getConfig().set("db.name", "ItemQuery");
+            getConfig().set("db.name", "minecraft");
             getConfig().set("db.user", "user");
             getConfig().set("db.pass", "password");
             this.saveConfig();
@@ -55,6 +57,9 @@ public class Main extends JavaPlugin {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        getCommand("request").setExecutor(ch);
+        getCommand("redeem").setExecutor(ch);
+        getCommand("retrieve").setExecutor(ch);
     }
 
     @Override
