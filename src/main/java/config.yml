@@ -1,0 +1,7 @@
+database:
+  ip: change
+  port: change
+  name: change
+  user: change
+  pass: change
+  # if the password contains special characters like '*' please put single quotes around the entire thing
