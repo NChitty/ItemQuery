@@ -2,6 +2,8 @@ package me.beastman3226.iq.requisitions;
 
 import me.beastman3226.iq.data.Query;
 import me.beastman3226.iq.data.Query.Data;
+import me.beastman3226.iq.utils.Converter;
+import me.beastman3226.iq.utils.Pricing;
 import org.bukkit.entity.Player;
 
 /**
@@ -23,7 +25,7 @@ public class RequisitionManager {
         }
         Query.addIndex(new Data().addData("PlayerName", p.getName())
                 .addData("Requisition", req)
-                .addData("Price", i));
+                .addData("Price", Pricing.getPrice(Converter.convert(items))));
         return true;
     }
 

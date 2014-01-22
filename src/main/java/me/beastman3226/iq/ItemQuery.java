@@ -2,12 +2,11 @@ package me.beastman3226.iq;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import me.beastman3226.iq.db.MySQL;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,6 +27,7 @@ public class ItemQuery extends JavaPlugin {
     @Override
     public void onEnable() {
         if(!getConfig().contains("database")) {
+            this.defaults();
             getConfig().options().copyDefaults(true);
         }
         database = new MySQL(this, getConfig().getString("database.ip"),
@@ -37,6 +37,11 @@ public class ItemQuery extends JavaPlugin {
                 getConfig().getString("database.pass"));
         setupTable();
         setupEconomy();
+    }
+
+    @Override
+    public void onDisable() {
+        this.saveConfig();
     }
 
     public MySQL getMySQLDatabase() {
@@ -71,6 +76,20 @@ public class ItemQuery extends JavaPlugin {
         }
         econ = rsp.getProvider();
         return econ != null;
+    }
+
+    private void defaults() {
+        HashMap<String, Object> defaults = new HashMap<String, Object>();
+        defaults.put("database.ip", "change");
+        defaults.put("database.port", "change");
+        defaults.put("database.name", "change");
+        defaults.put("database.user", "change");
+        defaults.put("database.pass", "change");
+        for(Material m : Material.values()) {
+            defaults.put(m.name().toLowerCase(), 0.0);
+        }
+        getConfig().addDefaults(defaults);
+        getLogger().log(Level.WARNING, "The defaults have been set! You should configure your config.yml");
     }
 
 }
