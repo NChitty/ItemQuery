@@ -137,4 +137,8 @@ public class MySQL extends Database {
 
     }
 
+    public String getName() {
+        return this.database;
+    }
+
 }

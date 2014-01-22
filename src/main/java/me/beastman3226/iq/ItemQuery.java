@@ -5,6 +5,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.beastman3226.iq.db.MySQL;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -16,6 +18,7 @@ public class ItemQuery extends JavaPlugin {
 
     public static ItemQuery instance;
     private MySQL database;
+    public static Economy econ;
     public ItemQuery() {
         instance = this;
     }
@@ -30,6 +33,7 @@ public class ItemQuery extends JavaPlugin {
                 getConfig().getString("database.name"),
                 getConfig().getString("database.user"),
                 getConfig().getString("database.pass"));
+        setupTable();
 
     }
 
@@ -47,9 +51,24 @@ public class ItemQuery extends JavaPlugin {
             database.openConnection();
             try {
                 Statement s = database.getConnection().createStatement();
+                s.executeQuery("IF OBJECT_ID('" + database.getName() + "requisitions') IS NULL" + "\n"
+                        + "CREATE TABLE(PlayerName VARCHAR(255), Requisition Text, Price FLOAT);");
             } catch (SQLException ex) {
                 getLogger().log(Level.WARNING, ex.getMessage());
             }
         }
     }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
 }
