@@ -24,6 +24,7 @@ public class Query {
                 if(i != 0) {
                    columns = columns + ", " + s;
                    dataToInsert = dataToInsert + ", '" + data.data.get(s) + "'";
+                   i++;
                 } else {
                    columns = s;
                    dataToInsert = "'" + data.data.get(s) + "'";
@@ -42,8 +43,9 @@ public class Query {
             String set = "";
             int i = 0;
             for(String s : data.data.keySet()) {
-                if(i == 1) {
+                if(i == 0) {
                     set = s + "='" + data.data.get(s) + "'";
+                    i++;
                 } else {
                     set = set + "," + s + "='" + data.data.get(s) + "'";
                 }

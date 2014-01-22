@@ -6,6 +6,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.beastman3226.iq.db.MySQL;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,7 +36,7 @@ public class ItemQuery extends JavaPlugin {
                 getConfig().getString("database.user"),
                 getConfig().getString("database.pass"));
         setupTable();
-
+        setupEconomy();
     }
 
     public MySQL getMySQLDatabase() {
