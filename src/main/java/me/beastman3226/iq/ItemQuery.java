@@ -59,7 +59,7 @@ public class ItemQuery extends JavaPlugin {
             try {
                 Statement s = database.getConnection().createStatement();
                 s.executeQuery("IF OBJECT_ID('" + database.getName() + "requisitions') IS NULL" + "\n"
-                        + "CREATE TABLE(PlayerName VARCHAR(255), Requisition Text, Price FLOAT);");
+                        + "CREATE TABLE(ReqID INTEGER NOT NULL AUTO_INCREMENT, PlayerName VARCHAR(255), Requisition Text, Price FLOAT, PRIMARY KEY (ReqID));");
             } catch (SQLException ex) {
                 getLogger().log(Level.WARNING, ex.getMessage());
             }

@@ -5,6 +5,7 @@ import me.beastman3226.iq.data.Query.Data;
 import me.beastman3226.iq.utils.Converter;
 import me.beastman3226.iq.utils.Pricing;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  *
@@ -28,5 +29,67 @@ public class RequisitionManager {
                 .addData("Price", Pricing.getPrice(Converter.convert(items))));
         return true;
     }
-
+    
+    public static String getRequisitionPlayer(int id) {
+        return (String) Query.getInfo("PlayerName", "ReqID", id);
+    }
+    
+    public static int getRequisitionID(String name) {
+        return (Integer) Query.getInfo("ReqID", "PlayerName", name);
+    }
+    
+    public static double getRequisitionPrice(int id) {
+        return (Double) Query.getInfo("Price", "ReqID", id);
+    }
+    
+    public static double getRequisitionPrice(String name) {
+        return (Double) Query.getInfo("Price", "PlayerName", name);
+    }
+    
+    public static String getRequisition(int id) {
+        return (String) Query.getInfo("Requisition", "ReqID", id);
+    }
+    
+    public static String getRequisition(String name) {
+        return (String) Query.getInfo("Requistion", "PlayerName", name);
+    }
+    
+    public static void removeItem(ItemStack item, String name) {
+        
+        ItemStack[] items = Converter.convert(getRequisition(name).split(","));
+        for(int i = 0; i < items.length; i++) {
+            if(items[i] == item) {
+                items[i] = null;
+            }
+        }
+        ItemStack[] returnTo = new ItemStack[items.length - 1];
+        for(int k = 0; k < items.length; k++) {
+            if(items[k] == null) {
+                continue;
+            } else {
+                returnTo[k] = items[k];
+            }
+        }
+        
+        Query.editIndex(new Data().addData("Requisition", Converter.convert(returnTo)), "PlayerName", name);
+    }
+    
+    public static void removeItem(ItemStack item, int id) {
+        ItemStack[] items = Converter.convert(getRequisition(id).split(","));
+        for(int i = 0; i < items.length; i++) {
+            if(items[i] == item) {
+                items[i] = null;
+            }
+        }
+        ItemStack[] returnTo = new ItemStack[items.length - 1];
+        for(int k = 0; k < items.length; k++) {
+            if(items[k] == null) {
+                continue;
+            } else {
+                returnTo[k] = items[k];
+            }
+        }
+        
+        Query.editIndex(new Data().addData("Requisition", Converter.convert(returnTo)), "ReqID", id);
+    }
 }

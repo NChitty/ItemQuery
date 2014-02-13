@@ -16,5 +16,10 @@ public class Pricing {
         }
         return price;
     }
-
+    
+    public static double getPrice(ItemStack items) {
+        double price = 0.0;
+        return (price = items.getAmount() * ItemQuery.instance.getConfig().getDouble(items.getType().name().toLowerCase()));
+    }
+    
 }
