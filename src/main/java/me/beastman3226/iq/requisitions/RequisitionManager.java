@@ -57,39 +57,48 @@ public class RequisitionManager {
     public static void removeItem(ItemStack item, String name) {
         
         ItemStack[] items = Converter.convert(getRequisition(name).split(","));
-        for(int i = 0; i < items.length; i++) {
-            if(items[i] == item) {
-                items[i] = null;
+            for(int i = 0; i < items.length; i++) {
+                if(items[i].getType() == item.getType()) {
+                    items[i].setAmount(items[i].getAmount() - item.getAmount());
+                    if(items[i].getAmount() <= 0) {
+                        items[i] = null;
+                    } else {
+                        items[i] = items[i];
+                    }
+                }
             }
-        }
-        ItemStack[] returnTo = new ItemStack[items.length - 1];
-        for(int k = 0; k < items.length; k++) {
-            if(items[k] == null) {
-                continue;
-            } else {
-                returnTo[k] = items[k];
+            ItemStack[] returnTo = new ItemStack[items.length - 1];
+            for(int k = 0; k < items.length; k++) {
+                if(items[k] == null) {
+                    continue;
+                } else {
+                    returnTo[k] = items[k];
+                }
             }
-        }
-        
         Query.editIndex(new Data().addData("Requisition", Converter.convert(returnTo)), "PlayerName", name);
     }
     
     public static void removeItem(ItemStack item, int id) {
-        ItemStack[] items = Converter.convert(getRequisition(id).split(","));
-        for(int i = 0; i < items.length; i++) {
-            if(items[i] == item) {
-                items[i] = null;
-            }
-        }
-        ItemStack[] returnTo = new ItemStack[items.length - 1];
-        for(int k = 0; k < items.length; k++) {
-            if(items[k] == null) {
-                continue;
-            } else {
-                returnTo[k] = items[k];
-            }
-        }
         
-        Query.editIndex(new Data().addData("Requisition", Converter.convert(returnTo)), "ReqID", id);
+        ItemStack[] items = Converter.convert(getRequisition(id).split(","));
+            for(int i = 0; i < items.length; i++) {
+                if(items[i].getType() == item.getType()) {
+                    items[i].setAmount(items[i].getAmount() - item.getAmount());
+                    if(items[i].getAmount() <= 0) {
+                        items[i] = null;
+                    } else {
+                        items[i] = items[i];
+                    }
+                }
+            }
+            ItemStack[] returnTo = new ItemStack[items.length - 1];
+            for(int k = 0; k < items.length; k++) {
+                if(items[k] == null) {
+                    continue;
+                } else {
+                    returnTo[k] = items[k];
+                }
+            }
+            Query.editIndex(new Data().addData("Requisition", Converter.convert(returnTo)), "ReqID", id);
     }
 }
