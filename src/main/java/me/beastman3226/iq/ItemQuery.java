@@ -27,7 +27,7 @@ public class ItemQuery extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if(!getConfig().contains("database")) {
+        if(!getConfig().contains("air")) {
             this.defaults();
             getConfig().options().copyDefaults(true);
         }
