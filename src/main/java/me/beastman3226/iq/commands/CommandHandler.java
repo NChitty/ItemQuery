@@ -6,6 +6,7 @@ import java.util.HashMap;
 import me.beastman3226.iq.requisitions.RequisitionManager;
 import me.beastman3226.iq.utils.Converter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,8 +25,9 @@ public class CommandHandler implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] strings) {
         if(cs instanceof Player) {
+            if(cs.hasPermission(cmnd.getPermission())) {
             if(cmnd.getName().equalsIgnoreCase("request") && strings.length > 0) {
-                RequisitionManager.createRequisition(strings, (Player) cs);
+                return RequisitionManager.createRequisition(strings, (Player) cs);
             } else if(cmnd.getName().equalsIgnoreCase("retrieve") && strings.length >=0) {
                 Inventory i = Bukkit.createInventory(null, 56, "Requisition #" + RequisitionManager.getRequisitionID(cs.getName()));
                 String[] vitems = RequisitionManager.getRequisition(cs.getName()).split(",");
@@ -43,7 +45,15 @@ public class CommandHandler implements CommandExecutor {
                 }
                 playerMap.put(cs.getName(), i);
                 ((Player)cs).openInventory(i);
+                return true;
             }
+            } else {
+                cs.sendMessage(ChatColor.translateAlternateColorCodes('&', cmnd.getPermissionMessage()));
+                return false;
+            }
+        } else {
+            cs.sendMessage("[ItemQuery]: I need a player name. Will be implementing admin functions soon");
+            return false;
         }
         return false;
     }

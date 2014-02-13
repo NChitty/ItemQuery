@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
+import me.beastman3226.iq.commands.CommandHandler;
 import me.beastman3226.iq.db.MySQL;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
@@ -37,6 +38,8 @@ public class ItemQuery extends JavaPlugin {
                 getConfig().getString("database.pass"));
         setupTable();
         setupEconomy();
+        getCommand("request").setExecutor(new CommandHandler());
+        getCommand("retrieve").setExecutor(new CommandHandler());
     }
 
     @Override

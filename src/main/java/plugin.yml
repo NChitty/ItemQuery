@@ -2,3 +2,20 @@ name: ItemQuery
 version: 1.0a
 main: me.beastman3226.iq.ItemQuery
 author: beastman3226
+commands:
+    request:
+        description: Requests items
+        usage: /<command> [itemname|id]:[meta];[amount] ...
+        permission: iq.request
+        permission-message: '&4You do not have "iq.request", please notify an adminstrator'
+    retrieve:
+        description: Opens an inventory for you to be able to get your items
+        permission: iq.retrieve
+        permission-message: '&4You do not have "iq.retrieve", please notify an adminstrator'
+permissions:
+    iq.request:
+        description: Ability to request items
+        default: true
+    iq.retrieve:
+        description: Ability to retrieve items
+        default: true
