@@ -18,7 +18,7 @@ public class InventoryHandler implements Listener {
     
     @EventHandler
     public void onClick(InventoryMoveItemEvent ide) {
-        if(CommandHandler.playerMap.containsValue(ide.getSource())) {
+        if(CommandHandler.playerMap.containsValue(ide.getSource()) && CommandHandler.playerMap.get(((Player) ide.getInitiator().getHolder()).getName()) == ide.getSource()) {
             Player p = (Player) ide.getInitiator().getHolder();
             double charge = Pricing.getPrice(ide.getItem());
             ItemQuery.econ.withdrawPlayer(p.getName(), charge);
