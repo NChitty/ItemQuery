@@ -5,6 +5,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
 import me.beastman3226.iq.commands.CommandHandler;
+import me.beastman3226.iq.data.FileHandler;
 import me.beastman3226.iq.db.MySQL;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
@@ -21,22 +22,29 @@ public class ItemQuery extends JavaPlugin {
     public static ItemQuery instance;
     private MySQL database;
     public static Economy econ;
-    public ItemQuery() {
-        instance = this;
-    }
+    public static boolean db;
 
     @Override
     public void onEnable() {
+        instance = this;
         if(!getConfig().contains("air")) {
             this.defaults();
             getConfig().options().copyDefaults(true);
         }
-        database = new MySQL(this, getConfig().getString("database.ip"),
+        if(getConfig().getBoolean("database.enabled")) {
+            database = new MySQL(this, getConfig().getString("database.ip"),
                 getConfig().getString("database.port"),
                 getConfig().getString("database.name"),
                 getConfig().getString("database.user"),
                 getConfig().getString("database.pass"));
-        setupTable();
+                setupTable();
+            db = true;
+        } else {
+            db = false;
+            FileHandler.initFiles(this);
+            FileHandler.load();
+        }
+        
         setupEconomy();
         getCommand("request").setExecutor(new CommandHandler());
         getCommand("retrieve").setExecutor(new CommandHandler());
@@ -62,7 +70,7 @@ public class ItemQuery extends JavaPlugin {
             try {
                 Statement s = database.getConnection().createStatement();
                 s.executeQuery("IF OBJECT_ID('" + database.getName() + "requisitions') IS NULL" + "\n"
-                        + "CREATE TABLE(ReqID INTEGER NOT NULL AUTO_INCREMENT, PlayerName VARCHAR(255), Requisition Text, Price FLOAT, PRIMARY KEY (ReqID));");
+                        + "CREATE TABLE(PlayerName VARCHAR(255), Requisition Text, Price FLOAT, PRIMARY KEY (ReqID));");
             } catch (SQLException ex) {
                 getLogger().log(Level.WARNING, ex.getMessage());
             }

@@ -30,7 +30,7 @@ public class InventoryHandler implements Listener {
                 return;
             }
             p.sendMessage(ChatColor.GRAY + "[" + ChatColor.RED + "ItemQuery" + ChatColor.GRAY + "]: " + ChatColor.WHITE + "You have been charged " + charge + ItemQuery.econ.currencyNamePlural() + " for purchasing " + ide.getItem().getType().name().toLowerCase());
-            RequisitionManager.removeItem(ide.getItem(), p.getName());
+            RequisitionManager.Database.removeItem(ide.getItem(), p.getName());
         }
     }
     
