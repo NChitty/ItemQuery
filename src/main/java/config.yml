@@ -1,4 +1,5 @@
 database:
+  enabled: false
   ip: change
   port: change
   name: change

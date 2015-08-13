@@ -4,7 +4,7 @@
 
     <groupId>me.beastman3226</groupId>
     <artifactId>ItemQuery</artifactId>
-    <version>1.0-Alpha</version>
+    <version>1.5-Alpha</version>
     <packaging>jar</packaging>
 
     <name>ItemQuery</name>
@@ -13,15 +13,17 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkitVersion>1.7.2-R0.3-SNAPSHOT</bukkitVersion>
+        <bukkitVersion>LATEST</bukkitVersion>
         <vaultVersion>1.2.30</vaultVersion>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
+            <artifactId>bukkit</artifactId>
             <version>${bukkitVersion}</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
