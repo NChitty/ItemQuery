@@ -29,14 +29,15 @@ public class CommandHandler implements CommandExecutor {
             if (cs.hasPermission(cmnd.getPermission())) {
                 if (ItemQuery.instance.db) {
                     if (cmnd.getName().equalsIgnoreCase("request") && strings.length > 0) {
+                        cs.sendMessage(ChatColor.GREEN + "ItemQuery: " + ChatColor.WHITE + "Request put in.");
                         return RequisitionManager.Database.createRequisition(strings, (Player) cs);
                     } else if (cmnd.getName().equalsIgnoreCase("retrieve") && strings.length >= 0) {
-                        Inventory i = Bukkit.createInventory(null, 56, "Requisition #" + RequisitionManager.Database.getRequisitionID(cs.getName()));
+                        Inventory i = Bukkit.createInventory(null, 54, "Requisition #" + RequisitionManager.Database.getRequisitionID(cs.getName()));
                         String[] vitems = RequisitionManager.Database.getRequisition(cs.getName()).split(",");
                         ItemStack[] items = Converter.convert(vitems);
-                        if (items.length > 56) {
+                        if (items.length > 54) {
                             ArrayList<ItemStack> enough = new ArrayList<ItemStack>(Arrays.asList(items));
-                            i.addItem(enough.subList(0, 55).toArray(new ItemStack[]{}));
+                            i.addItem(enough.subList(0, 53).toArray(new ItemStack[]{}));
                             int k = 0;
                             while (k < 56) {
                                 enough.remove(k);
@@ -47,20 +48,22 @@ public class CommandHandler implements CommandExecutor {
                         }
                         playerMap.put(cs.getName(), i);
                         ((Player) cs).openInventory(i);
+                        
                         return true;
                     }
                 } else {
                     if (cmnd.getName().equalsIgnoreCase("request") && strings.length > 0) {
+                        cs.sendMessage(ChatColor.GREEN + "ItemQuery: " + ChatColor.WHITE + "Request put in.");
                         return RequisitionManager.File.createRequisition(strings, (Player) cs);
                     } else if (cmnd.getName().equalsIgnoreCase("retrieve") && strings.length >= 0) {
-                        Inventory i = Bukkit.createInventory(null, 56, "Requisition #" + RequisitionManager.Database.getRequisitionID(cs.getName()));
+                        Inventory i = Bukkit.createInventory(((Player)cs), 54, "Requisition #" + RequisitionManager.File.getRequisitionID(cs.getName()));
                         String[] vitems = RequisitionManager.File.getRequisition(cs.getName());
                         ItemStack[] items = Converter.convert(vitems);
-                        if (items.length > 56) {
+                        if (items.length > 54) {
                             ArrayList<ItemStack> enough = new ArrayList<ItemStack>(Arrays.asList(items));
-                            i.addItem(enough.subList(0, 55).toArray(new ItemStack[]{}));
+                            i.addItem(enough.subList(0, 53).toArray(new ItemStack[]{}));
                             int k = 0;
-                            while (k < 56) {
+                            while (k < 54) {
                                 enough.remove(k);
                                 k++;
                             }
