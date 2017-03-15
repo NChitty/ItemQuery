@@ -1,5 +1,6 @@
 package me.beastman3226.iq.requisitions;
 
+import java.util.Random;
 import me.beastman3226.iq.data.FileHandler;
 import me.beastman3226.iq.data.Query;
 import me.beastman3226.iq.data.Query.Data;
@@ -13,35 +14,49 @@ import org.bukkit.inventory.ItemStack;
  * @author beastman3226
  */
 public class RequisitionManager {
-    
+
     public static class File {
+
         public static boolean createRequisition(String[] items, Player p) {
             FileHandler.requisitionYaml.set(p.getName() + ".items", items);
             double price = Pricing.getPrice(Converter.convert(items));
             FileHandler.requisitionYaml.set(p.getName() + ".price", price);
+            int id = 1000;
+            Random r = new Random();
+            id = (r.nextInt(1000) + 1000);
+            for (String s: FileHandler.requisitionYaml.getValues(false).keySet()) {
+                if (FileHandler.requisitionYaml.getInt(s + ".id") == id) {
+                    id = (r.nextInt(5000) + 5000);
+                }
+            }
+            FileHandler.requisitionYaml.set(p.getName() + ".id", id);
             FileHandler.save();
             return true;
         }
-        
+
+        public static int getRequisitionID(String name) {
+            return FileHandler.requisitionYaml.getInt(name + ".id");
+        }
+
         public static double getRequisitionPrice(String name) {
-           return FileHandler.requisitionYaml.getDouble(name + ".price");
+            return FileHandler.requisitionYaml.getDouble(name + ".price");
         }
-        
+
         public static String[] getRequisition(String name) {
-            return (String[]) FileHandler.requisitionYaml.getStringList(name + ".items").toArray();
+            return FileHandler.requisitionYaml.getStringList(name + ".items").toArray(new String[1]);
         }
-        
+
         public static void removeItem(ItemStack item, String name) {
             ItemStack[] items = Converter.convert(getRequisition(name));
-            for(ItemStack match : items) {
-                if(match.getType().equals(item.getType())) {
+            for (ItemStack match : items) {
+                if (match.getType().equals(item.getType())) {
                     match.setAmount(match.getAmount() - item.getAmount());
-                    if(match.getAmount() <=0) {
+                    if (match.getAmount() <= 0) {
                         match = null;
                     }
                 }
             }
-            ItemStack[] returnTo = new ItemStack[items.length -1];
+            ItemStack[] returnTo = new ItemStack[items.length - 1];
             for (int k = 0; k < items.length; k++) {
                 if (items[k] == null) {
                     continue;
@@ -52,9 +67,9 @@ public class RequisitionManager {
             FileHandler.requisitionYaml.set(name + ".items", Converter.convert(returnTo));
         }
     }
-    
-    
+
     public static class Database {
+
         public static boolean createRequisition(String[] items, Player p) {
             String req = "";
             int i = 0;

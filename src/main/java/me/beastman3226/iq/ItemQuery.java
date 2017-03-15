@@ -1,14 +1,17 @@
 package me.beastman3226.iq;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import me.beastman3226.iq.commands.CommandHandler;
 import me.beastman3226.iq.data.FileHandler;
 import me.beastman3226.iq.db.MySQL;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Material;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -27,6 +30,7 @@ public class ItemQuery extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        this.reloadConfig();
         if(!getConfig().contains("air")) {
             this.defaults();
             getConfig().options().copyDefaults(true);
