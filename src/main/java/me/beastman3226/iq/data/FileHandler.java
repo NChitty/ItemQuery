@@ -1,8 +1,6 @@
 package me.beastman3226.iq.data;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import me.beastman3226.iq.ItemQuery;
@@ -39,7 +37,6 @@ public class FileHandler {
      * Reloads the specified config, simply dumps all information that is in
      * memory and replaces it with all information from file.
      *
-     * @param config the config to be reloaded
      */
     public static void reload() {
         try {
@@ -52,22 +49,6 @@ public class FileHandler {
             ItemQuery.instance.getLogger().severe(ex.getLocalizedMessage());
         }
 
-    }
-
-    /**
-     * This is a method for loading all the files at startup
-     *
-     */
-    public static void load() {
-        try {
-            requisitionYaml.load(requisitionFile);
-        } catch (FileNotFoundException ex) {
-            ItemQuery.instance.getLogger().severe(ex.getLocalizedMessage());
-        } catch (IOException ex) {
-            ItemQuery.instance.getLogger().severe(ex.getLocalizedMessage());
-        } catch (InvalidConfigurationException ex) {
-            ItemQuery.instance.getLogger().severe(ex.getLocalizedMessage());
-        }
     }
 
     /**

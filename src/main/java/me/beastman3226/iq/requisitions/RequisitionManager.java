@@ -1,11 +1,10 @@
 package me.beastman3226.iq.requisitions;
 
-import java.util.Random;
+import java.util.*;
+
+import com.evilmidget.UUIDFetcher;
 import me.beastman3226.iq.data.FileHandler;
-import me.beastman3226.iq.data.Query;
-import me.beastman3226.iq.data.Query.Data;
 import me.beastman3226.iq.utils.Converter;
-import me.beastman3226.iq.utils.Pricing;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,110 +16,72 @@ public class RequisitionManager {
 
     public static class File {
 
-        public static boolean createRequisition(String[] items, Player p) {
-            FileHandler.requisitionYaml.set(p.getName() + ".items", items);
-            double price = Pricing.getPrice(Converter.convert(items));
-            FileHandler.requisitionYaml.set(p.getName() + ".price", price);
-            int id = 1000;
-            Random r = new Random();
-            id = (r.nextInt(1000) + 1000);
-            for (String s: FileHandler.requisitionYaml.getValues(false).keySet()) {
-                if (FileHandler.requisitionYaml.getInt(s + ".id") == id) {
-                    id = (r.nextInt(5000) + 5000);
-                }
-            }
-            FileHandler.requisitionYaml.set(p.getName() + ".id", id);
+        public static boolean createRequisition(String[] items, Player p) throws Exception {
+            String[] convertedItems = Converter.convertToFile(items);
+            FileHandler.requisitionYaml.set(UUIDFetcher.getUUIDOf(p.getName()).toString() + ".items", convertedItems);
+            int id = createID();
+            FileHandler.requisitionYaml.set(UUIDFetcher.getUUIDOf(p.getName()).toString() + ".id", id);
             FileHandler.save();
             return true;
         }
 
-        public static int getRequisitionID(String name) {
-            return FileHandler.requisitionYaml.getInt(name + ".id");
+        private static int createID() {
+            Random r = new Random();
+            int id = (r.nextInt(1000000) + 1000);
+            for(String s : FileHandler.requisitionYaml.getValues(false).keySet()) {
+                if(FileHandler.requisitionYaml.getInt(s + ".id") == id) return createID();
+            }
+            return id;
         }
 
-        public static double getRequisitionPrice(String name) {
-            return FileHandler.requisitionYaml.getDouble(name + ".price");
+        public static int getRequisitionID(String name) {
+            FileHandler.reload();
+            try {
+                return FileHandler.requisitionYaml.getInt(UUIDFetcher.getUUIDOf(name).toString() + ".id");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return -1;
         }
 
         public static String[] getRequisition(String name) {
-            return FileHandler.requisitionYaml.getStringList(name + ".items").toArray(new String[1]);
+            FileHandler.reload();
+           String[] sample = new String[]{};
+            try {
+                List<String> list =  FileHandler.requisitionYaml.getStringList(UUIDFetcher.getUUIDOf(name).toString() + ".items");
+
+                return list.toArray(sample);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
 
         public static void removeItem(ItemStack item, String name) {
-            ItemStack[] items = Converter.convert(getRequisition(name));
-            for (ItemStack match : items) {
-                if (match.getType().equals(item.getType())) {
-                    match.setAmount(match.getAmount() - item.getAmount());
-                    if (match.getAmount() <= 0) {
-                        match = null;
+            List wack = Arrays.asList(Converter.convert(getRequisition(name)));
+            ArrayList<ItemStack> items = new ArrayList<ItemStack>(wack);
+            if (items.contains(item)) {
+                ItemStack unmodified = items.remove(items.indexOf(item));
+                unmodified.setAmount(unmodified.getAmount() - item.getAmount());
+                if (unmodified.getAmount() > 0) {
+                    items.add(unmodified);
+                }
+                try {
+                    boolean hasItems = false;
+                    for (ItemStack is : items) {
+                        hasItems = is.getAmount() >= 0;
                     }
-                }
-            }
-            ItemStack[] returnTo = new ItemStack[items.length - 1];
-            for (int k = 0; k < items.length; k++) {
-                if (items[k] == null) {
-                    continue;
-                } else {
-                    returnTo[k] = items[k];
-                }
-            }
-            FileHandler.requisitionYaml.set(name + ".items", Converter.convert(returnTo));
-        }
-    }
-
-    public static class Database {
-
-        public static boolean createRequisition(String[] items, Player p) {
-            String req = "";
-            int i = 0;
-            for (String s : items) {
-                if (i == 0) {
-                    req = s;
-                    i++;
-                } else {
-                    req = req + "," + s;
-                }
-            }
-            Query.addIndex(new Data().addData("PlayerName", p.getName())
-                    .addData("Requisition", req)
-                    .addData("Price", Pricing.getPrice(Converter.convert(items))));
-            return true;
-        }
-
-        public static int getRequisitionID(String name) {
-            return (Integer) Query.getInfo("ReqID", "PlayerName", name);
-        }
-
-        public static double getRequisitionPrice(String name) {
-            return (Double) Query.getInfo("Price", "PlayerName", name);
-        }
-
-        public static String getRequisition(String name) {
-            return (String) Query.getInfo("Requistion", "PlayerName", name);
-        }
-
-        public static void removeItem(ItemStack item, String name) {
-
-            ItemStack[] items = Converter.convert(getRequisition(name).split(","));
-            for (int i = 0; i < items.length; i++) {
-                if (items[i].getType() == item.getType()) {
-                    items[i].setAmount(items[i].getAmount() - item.getAmount());
-                    if (items[i].getAmount() <= 0) {
-                        items[i] = null;
-                    } else {
-                        items[i] = items[i];
+                    if (!hasItems || items.isEmpty()) {
+                        FileHandler.requisitionYaml.set(UUIDFetcher.getUUIDOf(name).toString(), null);
+                        FileHandler.save();
+                        return;
                     }
+                    FileHandler.requisitionYaml.set(UUIDFetcher.getUUIDOf(name).toString() + ".items", Converter.convert(items.toArray(new ItemStack[]{})));
+                    FileHandler.save();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-            ItemStack[] returnTo = new ItemStack[items.length - 1];
-            for (int k = 0; k < items.length; k++) {
-                if (items[k] == null) {
-                    continue;
-                } else {
-                    returnTo[k] = items[k];
-                }
-            }
-            Query.editIndex(new Data().addData("Requisition", Converter.convert(returnTo)), "PlayerName", name);
         }
     }
 }
